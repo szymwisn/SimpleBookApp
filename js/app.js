@@ -52,7 +52,8 @@ var UIController = (function () {
         isbn: '.input__isbn',
         addButton: '.btn__add',
         delButton: '.btn__delete',
-        bookContainer: '.book__container'
+        bookContainer: '.book__container',
+        header : '.header'
     };
 
     return {
@@ -67,7 +68,12 @@ var UIController = (function () {
         },
 
         showError: function(msg) {
-            alert(msg);
+            var html, newHtml;
+            
+            html = '<div class="container"><div class="notification is-danger" style="margin-bottom: 15px;"><button class="delete" onclick="this.parentElement.style.display=\'none\';"></button><strong>Error!</strong> %MSG%</div></div>';
+            newHtml = html.replace("%MSG%", msg);
+
+            document.querySelector(DOMstrings.header).insertAdjacentHTML('afterend', newHtml);
         },
 
         updateUI: function(obj) {

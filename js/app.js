@@ -66,6 +66,10 @@ var UIController = (function () {
             };
         },
 
+        showError: function(msg) {
+            alert(msg);
+        },
+
         updateUI: function(obj) {
             var html, newHtml;
 
@@ -89,16 +93,13 @@ var controller = (function (dataCtrl, UICtrl) {
     var DOM;
 
     var setUpDOM = function() {
-         DOM = UICtrl.gedDOM();
+          DOM = UICtrl.gedDOM();
     };
 
     var setUpEventListeners = function() {
 
         // "Add to list" button listener
         document.querySelector(DOM.addButton).addEventListener('click', addBook);
-
-        // "X" - delete a book button listener
-        document.querySelector(DOM.delButton).addEventListener('click', removeBook);
 
         // "Enter" key listener
         document.addEventListener('keypress', function(event) {
@@ -114,15 +115,29 @@ var controller = (function (dataCtrl, UICtrl) {
         // Get input from forms
         var input = UICtrl.getInput();
 
-        // Create a new Book object
-        var newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
+        // Validate input
+        if(validateInput(input)) {
+            // Create a new Book object
+            var newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
 
-        // Update UI
-        UICtrl.updateUI(newBook);
+            // Update UI
+            UICtrl.updateUI(newBook);
+        } else {
+            UICtrl.showError('Wrong input values.');
+        }
+     
     };
 
     var removeBook = function() {
         console.log('remove');
+    };
+
+    var validateInput = function(obj) {
+        if(obj.title === '' || obj.author === '' || obj.genre === '' || isNaN(obj.isbn)) {
+            return false;
+        }
+
+        return true;
     };
 
     return {

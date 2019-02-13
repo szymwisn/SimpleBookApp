@@ -51,7 +51,8 @@ var UIController = (function () {
         date: '.input__date',
         isbn: '.input__isbn',
         addButton: '.btn__add',
-        delButton: '.btn__delete'
+        delButton: '.btn__delete',
+        bookContainer: '.book__container'
     };
 
     return {
@@ -63,6 +64,16 @@ var UIController = (function () {
                 date: document.querySelector(DOMstrings.date).value,
                 isbn: document.querySelector(DOMstrings.isbn).value,
             };
+        },
+
+        updateUI: function(obj) {
+            var html, newHtml;
+
+            html = '<tr><td>%title%</td><td>%author%</td><td>%genre%</td><td>%date%</td><td>%ISBN%</td><td><a class="delete btn__delete"></a></td></tr>';
+
+            newHtml = html.replace("%title%", obj.title).replace("%author%", obj.author).replace("%genre%", obj.genre).replace("%date%", obj.date).replace("%ISBN%", obj.isbn);
+
+            document.querySelector(DOMstrings.bookContainer).insertAdjacentHTML('beforeend', newHtml);
         },
 
         gedDOM: function() {
@@ -107,12 +118,12 @@ var controller = (function (dataCtrl, UICtrl) {
         var newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
 
         // Update UI
-        // UICtrl.updateUI(newBook);
+        UICtrl.updateUI(newBook);
     };
 
     var removeBook = function() {
         console.log('remove');
-    }
+    };
 
     return {
         initialize: function() {

@@ -73,9 +73,9 @@ var UIController = (function () {
         updateUI: function(obj) {
             var html, newHtml;
 
-            html = '<tr><td>%title%</td><td>%author%</td><td>%genre%</td><td>%date%</td><td>%ISBN%</td><td><a class="delete btn__delete"></a></td></tr>';
+            html = '<tr><td>%ID%</td></td><td>%title%</td><td>%author%</td><td>%genre%</td><td>%date%</td><td>%ISBN%</td><td><a class="delete btn__delete"></a></td></tr>';
 
-            newHtml = html.replace("%title%", obj.title).replace("%author%", obj.author).replace("%genre%", obj.genre).replace("%date%", obj.date).replace("%ISBN%", obj.isbn);
+            newHtml = html.replace("%ID%", obj.id).replace("%title%", obj.title).replace("%author%", obj.author).replace("%genre%", obj.genre).replace("%date%", obj.date).replace("%ISBN%", obj.isbn);
 
             document.querySelector(DOMstrings.bookContainer).insertAdjacentHTML('beforeend', newHtml);
         },
@@ -133,17 +133,22 @@ var controller = (function (dataCtrl, UICtrl) {
     };
 
     var validateInput = function(obj) {
-        if(obj.title === '' || obj.author === '' || obj.genre === '' || isNaN(obj.isbn)) {
+        if(obj.title === '' || obj.author === '' || obj.genre === '' || obj.date === '' || obj.isbn === '') {
             return false;
         }
 
         return true;
     };
 
+    var setDefaultDate = function() {
+        document.querySelector(DOM.date).valueAsDate = new Date();
+    };
+
     return {
         initialize: function() {
             setUpDOM();
             setUpEventListeners();
+            setDefaultDate();
         }
     };
 

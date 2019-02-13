@@ -123,11 +123,16 @@ var controller = (function (dataCtrl, UICtrl) {
 
         // Validate input
         if(validateInput(input)) {
-            // Create a new Book object
-            var newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
+            // Check whether the book has already been added to the database
+            if(checkIfExists(input.isbn)) {
+                // Create a new Book object
+                var newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
 
-            // Update UI
-            UICtrl.updateUI(newBook);
+                // Update UI
+                UICtrl.updateUI(newBook);
+            } else {
+                UICtrl.showError('Book has already been added.');
+            }
         } else {
             UICtrl.showError('Wrong input values.');
         }
@@ -141,6 +146,18 @@ var controller = (function (dataCtrl, UICtrl) {
     var validateInput = function(obj) {
         if(obj.title === '' || obj.author === '' || obj.genre === '' || obj.date === '' || obj.isbn === '') {
             return false;
+        }
+
+        return true;
+    };
+
+    var checkIfExists = function(isbn) {
+        var data =  dataCtrl.getData();
+
+        for(var i = 0; i < data.allBooks.length; i++) {
+            if(data.allBooks[i].isbn === isbn) {
+                return false;
+            }
         }
 
         return true;

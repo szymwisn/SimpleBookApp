@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BookList</title>
+    <link rel="stylesheet" href="css/bulma.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Simple BookList App</h1>
+        <h2 class="subtitle">
+          App uses a CSS framework called <strong>Bulma</strong>.
+        </h2>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Title</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input class="input input__title" type="text" />
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Author</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input class="input input__author" type="text" />
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Genre</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input class="input input__genre" type="text" />
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Release date</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input class="input input__date" type="text" />
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">ISBN</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input class="input input__isbn" type="text" />
+              </p>
+            </div>
+          </div>
+        </div>
+        <input class="button is-primary is-outlined is-pulled-right btn__add" type="submit" value="Add to list">
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <table class="table is-fullwidth is-hoverable is-striped">
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Date</th>
+            <th>ISBN</th>
+            <th></th>
+          </tr>
+          <!--
+          <tr>
+            <td>%title%</td>
+            <td>%author%</td>
+            <td>%genre%</td>
+            <td>%date%</td>
+            <td>%ISBN%</td>
+            <td><a class="delete btn__delete"></a></td>
+          </tr>
+          -->
+        </table>
+      </div>
+    </section>
+  </body>
+</html>

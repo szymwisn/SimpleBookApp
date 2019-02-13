@@ -1,5 +1,38 @@
 var dataController = (function () {
+    var Book = function(ID, title, author, genre, date, isbn) {
+        this.ID = ID;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.date = date;
+        this.isbn = isbn;
+    };
 
+    var data = {
+        allBooks: [],
+        bookCount: 0
+    };
+
+    return {
+        addItem: function(title, author, genre, date, isbn) {
+
+            var newItem, ID;
+
+            if(data.allBooks.length === 0) {
+                ID = 0;
+            } else {
+                ID = data.allBooks[data.allBooks.length - 1] + 1;
+            }
+
+            newItem = new Book(ID, title, author, genre, date, isbn);
+
+            return newItem;
+        },
+
+        getData: function() {
+            return data;
+        }
+    };
 
 })();
 

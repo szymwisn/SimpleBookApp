@@ -1,6 +1,6 @@
 var dataController = (function () {
-    var Book = function(ID, title, author, genre, date, isbn) {
-        this.ID = ID;
+    var Book = function(id, title, author, genre, date, isbn) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.genre = genre;
@@ -9,28 +9,33 @@ var dataController = (function () {
     };
 
     var data = {
-        allBooks: [],
-        bookCount: 0
+        allBooks: []
     };
 
     return {
         addItem: function(title, author, genre, date, isbn) {
 
-            var newItem, ID;
+            var newItem, id;
 
             if(data.allBooks.length === 0) {
-                ID = 0;
+                id = 0;
             } else {
-                ID = data.allBooks[data.allBooks.length - 1] + 1;
+                id = data.allBooks[data.allBooks.length - 1].id + 1;
             }
 
-            newItem = new Book(ID, title, author, genre, date, isbn);
+            newItem = new Book(id, title, author, genre, date, isbn);
+
+            data.allBooks.push(newItem);
 
             return newItem;
         },
 
         getData: function() {
             return data;
+        },
+
+        test: function() {
+            console.log(data);
         }
     };
 
@@ -50,6 +55,16 @@ var UIController = (function () {
     };
 
     return {
+        getInput: function() {
+            return {
+                title: document.querySelector(DOMstrings.title).value,
+                author: document.querySelector(DOMstrings.author).value,
+                genre: document.querySelector(DOMstrings.genre).value,
+                date: document.querySelector(DOMstrings.date).value,
+                isbn: document.querySelector(DOMstrings.isbn).value,
+            };
+        },
+
         gedDOM: function() {
             return DOMstrings;
         }
@@ -84,6 +99,15 @@ var controller = (function (dataCtrl, UICtrl) {
 
     var addBook = function() {
         console.log('add');
+
+        // Get input from forms
+        var input = UICtrl.getInput();
+
+        // Create a new Book object
+        var newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
+
+        // Update UI
+        // UICtrl.updateUI(newBook);
     };
 
     var removeBook = function() {

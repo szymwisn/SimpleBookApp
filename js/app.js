@@ -53,10 +53,22 @@ var UIController = (function () {
         addButton: '.btn__add',
         delButton: '.btn__delete',
         bookContainer: '.book__container',
-        header : '.header'
+        header: '.header',
     };
 
     return {
+        clearInputs: function() {
+            var inputsNodeList = document.querySelectorAll(DOMstrings.title + ', ' + DOMstrings.author + ', ' + DOMstrings.genre + ', ' + DOMstrings.isbn);
+        
+            var inputsArray = Array.from(inputsNodeList);
+
+            inputsArray.forEach(function(el) {
+                el.value = '';
+            });
+
+            inputsArray[0].focus();
+        },
+
         getInput: function() {
             return {
                 title: document.querySelector(DOMstrings.title).value,
@@ -130,6 +142,8 @@ var controller = (function (dataCtrl, UICtrl) {
 
                 // Update UI
                 UICtrl.updateUI(newBook);
+                UICtrl.clearInputs();
+
             } else {
                 UICtrl.showError('Book has already been added.');
             }

@@ -33,12 +33,7 @@ var dataController = (function () {
         getData: function() {
             return data;
         },
-
-        test: function() {
-            console.log(data);
-        }
     };
-
 })();
 
 
@@ -54,9 +49,63 @@ var UIController = (function () {
         delButton: '.btn__delete',
         bookContainer: '.book__container',
         header: '.header',
+        sortId: '.sort__id',
+        sortTitle: '.sort__title',
+        sortAuthor: '.sort__author',
+        sortGenre: '.sort__genre',
+        sortDate: '.sort__date',
+        sortISBN: '.sort__isbn',
+        table: '.table'
     };
 
     return {
+        sortTable: function(by) {
+            var table, rows, column, r1, r2, switching;
+
+            table = document.querySelector(DOMstrings.table);
+            rows = table.rows;
+
+            switch(by) {
+                case 'id': column = 0; break;
+                case 'title': column = 1; break;
+                case 'author': column = 2; break;
+                case 'genre': column = 3; break;
+                case 'date': column = 4; break;
+                case 'isbn': column = 5; break;
+            }
+
+            do {
+                switching = false;
+                for(var i = 1; i < rows.length - 1; i++) {
+                    r1 = rows[i].getElementsByTagName('td')[column];
+                    r2 = rows[i+1].getElementsByTagName('td')[column];
+    
+                    doTheSwitch();
+
+                }
+            } while(switching);
+
+            function doTheSwitch() {
+                if(column === 0 || column === 5) {
+                    if(Number(r1.innerHTML) > Number(r2.innerHTML)) {
+                        rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+                        switching = true;
+                        console.log('0');
+                    }
+                } else if(column > 0 && column < 4) {
+                    if(r1.innerHTML.toLowerCase() > r2.innerHTML.toLowerCase()) {
+                        rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+                        switching = true;
+                        console.log('1-3');
+                    }
+                } else if(column === 4) {
+
+                    //switching = true;
+                    console.log('4');
+                }
+            }
+        },
+
         clearInputs: function() {
             var inputsNodeList = document.querySelectorAll(DOMstrings.title + ', ' + DOMstrings.author + ', ' + DOMstrings.genre + ', ' + DOMstrings.isbn);
         
@@ -125,7 +174,33 @@ var controller = (function (dataCtrl, UICtrl) {
                 addBook();
             }
         });
+
+        document.querySelector(DOM.sortId).addEventListener('click', function() {
+            UICtrl.sortTable('id');
+        });
+
+        document.querySelector(DOM.sortTitle).addEventListener('click', function() {
+            UICtrl.sortTable('title');
+        });
+
+        document.querySelector(DOM.sortAuthor).addEventListener('click', function() {
+            UICtrl.sortTable('author');
+        });
+
+        document.querySelector(DOM.sortGenre).addEventListener('click', function() {
+            UICtrl.sortTable('genre');
+        });
+
+        document.querySelector(DOM.sortDate).addEventListener('click', function() {
+            UICtrl.sortTable('date');
+        });
+
+        document.querySelector(DOM.sortISBN).addEventListener('click', function() {
+            UICtrl.sortTable('isbn');
+        });
     };
+
+    
 
     var addBook = function() {
         console.log('add');

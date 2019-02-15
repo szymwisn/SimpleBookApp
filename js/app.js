@@ -86,24 +86,52 @@ var UIController = (function () {
             } while(switching);
 
             function doTheSwitch() {
+                // sorting numbers
                 if(column === 0 || column === 5) {
                     if(Number(r1.innerHTML) > Number(r2.innerHTML)) {
                         rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
                         switching = true;
-                        console.log('0');
                     }
+
+                // sorting strings
                 } else if(column > 0 && column < 4) {
                     if(r1.innerHTML.toLowerCase() > r2.innerHTML.toLowerCase()) {
                         rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
                         switching = true;
-                        console.log('1-3');
                     }
+
+                // sorting dates
                 } else if(column === 4) {
 
-                    //switching = true;
-                    console.log('4');
+                    // first sort by year
+                    if(convertDate(r1.innerHTML)[0] > convertDate(r2.innerHTML)[0]) {
+                        rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+                        switching = true;
+                    } else
+
+                    // if the same year, sort by month
+                    if(convertDate(r1.innerHTML)[0] === convertDate(r2.innerHTML)[0]) {
+                        if(convertDate(r1.innerHTML)[1] > convertDate(r2.innerHTML)[1]) {
+                            rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+                            switching = true;
+                        } else
+
+                        // if the same year nad month, sort by day
+                        if(convertDate(r1.innerHTML)[1] === convertDate(r2.innerHTML)[1]) {
+                            if(convertDate(r1.innerHTML)[2] > convertDate(r2.innerHTML)[2]) {
+                                rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+                                switching = true;
+                            }
+                        }
+                    } 
                 }
             }
+
+            // transforms and returns date to an array [year, month, day]
+            function convertDate(date) {
+                var arr = date.split("-");
+                return [arr[0], arr[1], arr[2]];
+            }      
         },
 
         clearInputs: function() {

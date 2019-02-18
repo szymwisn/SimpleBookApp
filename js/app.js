@@ -30,6 +30,22 @@ var dataController = (function () {
             return newItem;
         },
 
+        removeItem: function(id) {
+
+            var ids, index;
+
+            ids = data.allBooks.map(function(current) {
+                return current.id;
+            });
+
+            index = ids.indexOf(id);
+
+            if(index !== -1) {
+                data.allBooks.splice(index, 1);
+            }
+        },
+
+
         getData: function() {
             return data;
         },
@@ -168,9 +184,9 @@ var UIController = (function () {
         updateUI: function(obj) {
             var html, newHtml;
 
-            html = '<tr><td>%ID%</td></td><td>%title%</td><td>%author%</td><td>%genre%</td><td>%date%</td><td>%ISBN%</td><td><a class="delete btn__delete"></a></td></tr>';
+            html = '<tr id="book-%ID%"><td>%ID%</td></td><td>%title%</td><td>%author%</td><td>%genre%</td><td>%date%</td><td>%ISBN%</td><td><a class="delete btn__delete"></a></td></tr>';
 
-            newHtml = html.replace("%ID%", obj.id).replace("%title%", obj.title).replace("%author%", obj.author).replace("%genre%", obj.genre).replace("%date%", obj.date).replace("%ISBN%", obj.isbn);
+            newHtml = html.replace("%ID%", obj.id).replace("%ID%", obj.id).replace("%title%", obj.title).replace("%author%", obj.author).replace("%genre%", obj.genre).replace("%date%", obj.date).replace("%ISBN%", obj.isbn);
 
             document.querySelector(DOMstrings.bookContainer).insertAdjacentHTML('beforeend', newHtml);
         },
@@ -203,6 +219,9 @@ var controller = (function (dataCtrl, UICtrl) {
             }
         });
 
+        document.querySelector(DOM.table).addEventListener('click', removeBook);
+
+        // Sort buttons listeners
         document.querySelector(DOM.sortId).addEventListener('click', function() {
             UICtrl.sortTable('id');
         });
@@ -256,8 +275,19 @@ var controller = (function (dataCtrl, UICtrl) {
      
     };
 
-    var removeBook = function() {
-        console.log('remove');
+    var removeBook = function(event) {
+        var el, ID;
+
+        if (event.target.className) {
+            el = event.target.parentNode.parentNode.id;
+            ID = parseInt(el.split('-')[1]);
+
+            // 1. remove book from dataController
+            dataCtrl.removeItem(ID);
+
+            // 2. remove book from UI
+        }
+       
     };
 
     var validateInput = function(obj) {

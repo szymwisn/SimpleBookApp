@@ -1,5 +1,5 @@
-var dataController = (function () {
-    var Book = function(id, title, author, genre, date, isbn) {
+const dataController = (function () {
+    let Book = function(id, title, author, genre, date, isbn) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -8,14 +8,14 @@ var dataController = (function () {
         this.isbn = isbn;
     };
 
-    var data = {
+    let data = {
         allBooks: []
     };
 
     return {
         addItem: function(title, author, genre, date, isbn) {
 
-            var newItem, id;
+            let id;
 
             if(data.allBooks.length === 0) {
                 id = 0;
@@ -23,7 +23,7 @@ var dataController = (function () {
                 id = data.allBooks[data.allBooks.length - 1].id + 1;
             }
 
-            newItem = new Book(id, title, author, genre, date, isbn);
+            const newItem = new Book(id, title, author, genre, date, isbn);
 
             data.allBooks.push(newItem);
 
@@ -33,13 +33,8 @@ var dataController = (function () {
 
         removeItem: function(id) {
 
-            var ids, index;
-
-            ids = data.allBooks.map(function(current) {
-                return current.id;
-            });
-
-            index = ids.indexOf(id);
+            const ids = data.allBooks.map(current => current.id);
+            let index = ids.indexOf(id);
 
             if(index !== -1) {
                 data.allBooks.splice(index, 1);
@@ -55,8 +50,8 @@ var dataController = (function () {
 
 
 
-var UIController = (function () {
-    var DOMstrings = {
+const UIController = (function () {
+    const DOMstrings = {
         title: '.input__title',
         author: '.input__author',
         genre: '.input__genre',
@@ -77,7 +72,7 @@ var UIController = (function () {
 
     return {
         sortTable: function(by) {
-            var table, rows, column, r1, r2, switching;
+            let table, rows, column, r1, r2, switching;
 
             table = document.querySelector(DOMstrings.table);
             rows = table.rows;
@@ -170,20 +165,18 @@ var UIController = (function () {
 
             // transforms and returns date to an array [year, month, day]
             function convertDate(date) {
-                var arr = date.split("-");
+                let arr = date.split("-");
                 return [arr[0], arr[1], arr[2]];
             }      
         },
 
 
         clearInputs: function() {
-            var inputsNodeList = document.querySelectorAll(DOMstrings.title + ', ' + DOMstrings.author + ', ' + DOMstrings.genre + ', ' + DOMstrings.isbn);
+            let inputsNodeList = document.querySelectorAll(DOMstrings.title + ', ' + DOMstrings.author + ', ' + DOMstrings.genre + ', ' + DOMstrings.isbn);
         
-            var inputsArray = Array.from(inputsNodeList);
+            let inputsArray = Array.from(inputsNodeList);
 
-            inputsArray.forEach(function(el) {
-                el.value = '';
-            });
+            inputsArray.forEach(el => el.value = '');
 
             inputsArray[0].focus();
         },
@@ -201,7 +194,7 @@ var UIController = (function () {
 
 
         showError: function(msg) {
-            var html, newHtml;
+            let html, newHtml;
             
             html = '<div class="container"><div class="notification is-danger" style="margin-bottom: 15px;"><button class="delete" onclick="this.parentElement.style.display=\'none\';"></button><strong>Error!</strong> %MSG%</div></div>';
             newHtml = html.replace("%MSG%", msg);
@@ -211,7 +204,7 @@ var UIController = (function () {
 
 
         addItem: function(obj) {
-            var html, newHtml;
+            let html, newHtml;
 
             html = '<tr id="book-%ID%"><td>%ID%</td></td><td>%title%</td><td>%author%</td><td>%genre%</td><td>%date%</td><td>%ISBN%</td><td><a class="delete btn__delete"></a></td></tr>';
 
@@ -222,9 +215,7 @@ var UIController = (function () {
 
 
         removeItem: function (selector) {
-            var el;
-
-            el = document.getElementById(selector);
+            let el = document.getElementById(selector);
 
             el.parentNode.removeChild(el);
         },
@@ -239,74 +230,57 @@ var UIController = (function () {
 
 
 
-var controller = (function (dataCtrl, UICtrl) {
-    var DOM;
+const controller = (function (dataCtrl, UICtrl) {
+    let DOM;
 
-    var setUpDOM = function() {
+    const setUpDOM = function() {
           DOM = UICtrl.gedDOM();
     };
 
-    var setUpEventListeners = function() {
+    const setUpEventListeners = function() {
 
         // "Add to list" button listener
         document.querySelector(DOM.addButton).addEventListener('click', addBook);
 
         // "Enter" key listener
-        document.addEventListener('keypress', function(event) {
+        document.addEventListener('keypress', (event) => {
             if(event.keyCode === 13) {
                 addBook();
             }
         });
 
+        // "Remove book" button listener
         document.querySelector(DOM.table).addEventListener('click', removeBook);
 
         // Sort buttons listeners
-        document.querySelector(DOM.sortId).addEventListener('click', function() {
-            UICtrl.sortTable('id');
-        });
-
-        document.querySelector(DOM.sortTitle).addEventListener('click', function() {
-            UICtrl.sortTable('title');
-        });
-
-        document.querySelector(DOM.sortAuthor).addEventListener('click', function() {
-            UICtrl.sortTable('author');
-        });
-
-        document.querySelector(DOM.sortGenre).addEventListener('click', function() {
-            UICtrl.sortTable('genre');
-        });
-
-        document.querySelector(DOM.sortDate).addEventListener('click', function() {
-            UICtrl.sortTable('date');
-        });
-
-        document.querySelector(DOM.sortISBN).addEventListener('click', function() {
-            UICtrl.sortTable('isbn');
-        });
+        document.querySelector(DOM.sortId).addEventListener('click', () => UICtrl.sortTable('id'));
+        document.querySelector(DOM.sortTitle).addEventListener('click', () => UICtrl.sortTable('title'));
+        document.querySelector(DOM.sortAuthor).addEventListener('click', () => UICtrl.sortTable('author'));
+        document.querySelector(DOM.sortGenre).addEventListener('click', () => UICtrl.sortTable('genre'));
+        document.querySelector(DOM.sortDate).addEventListener('click', () => UICtrl.sortTable('date'));
+        document.querySelector(DOM.sortISBN).addEventListener('click', () => UICtrl.sortTable('isbn'));
     };
 
     
 
-    var addBook = function() {
-        console.log('add');
-
+    const addBook = function() {
+ 
         // Get input from forms
-        var input = UICtrl.getInput();
+        let input = UICtrl.getInput();
 
         // Validate input
         if(validateInput(input)) {
             // Check whether the book has already been added to the database
             if(checkIfExists(input.isbn)) {
                 // Create a new Book object
-                var newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
+                let newBook = dataCtrl.addItem(input.title, input.author, input.genre, input.date, input.isbn);
 
                 // Update UI
                 UICtrl.addItem(newBook);
                 UICtrl.clearInputs();
 
             } else {
-                UICtrl.showError('Book has already been added.');
+                UICtrl.showError(`Book with such ISBN number (${input.isbn}) has already been added.`);
             }
         } else {
             UICtrl.showError('Some inputs are empty.');
@@ -314,10 +288,10 @@ var controller = (function (dataCtrl, UICtrl) {
      
     };
 
-    var removeBook = function(event) {
-        var el, ID;
+    const removeBook = function(event) {
+        let el, ID;
 
-        if (event.target.className === "delete btn__delete") {
+        if (event.target.className === 'delete btn__delete') {
             el = event.target.parentNode.parentNode.id;
             ID = parseInt(el.split('-')[1]);
 
@@ -330,7 +304,7 @@ var controller = (function (dataCtrl, UICtrl) {
        
     };
 
-    var validateInput = function(obj) {
+    const validateInput = function(obj) {
         if(obj.title === '' || obj.author === '' || obj.genre === '' || obj.date === '' || obj.isbn === '') {
             return false;
         }
@@ -338,10 +312,10 @@ var controller = (function (dataCtrl, UICtrl) {
         return true;
     };
 
-    var checkIfExists = function(isbn) {
-        var data =  dataCtrl.getData();
+    const checkIfExists = function(isbn) {
+        let data =  dataCtrl.getData();
 
-        for(var i = 0; i < data.allBooks.length; i++) {
+        for(let i = 0; i < data.allBooks.length; i++) {
             if(data.allBooks[i].isbn === isbn) {
                 return false;
             }
@@ -350,7 +324,7 @@ var controller = (function (dataCtrl, UICtrl) {
         return true;
     };
 
-    var setDefaultDate = function() {
+    const setDefaultDate = function() {
         document.querySelector(DOM.date).valueAsDate = new Date();
     };
 

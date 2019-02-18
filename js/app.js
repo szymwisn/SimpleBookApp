@@ -82,13 +82,37 @@ var UIController = (function () {
             table = document.querySelector(DOMstrings.table);
             rows = table.rows;
 
+            // set active indicator
+            function disableIndicators() {
+                document.querySelector(DOMstrings.sortId).classList.remove('active');
+                document.querySelector(DOMstrings.sortTitle).classList.remove('active');
+                document.querySelector(DOMstrings.sortAuthor).classList.remove('active');
+                document.querySelector(DOMstrings.sortGenre).classList.remove('active');
+                document.querySelector(DOMstrings.sortDate).classList.remove('active');
+                document.querySelector(DOMstrings.sortISBN).classList.remove('active');
+            }
+
+            disableIndicators();
+
             switch(by) {
-                case 'id': column = 0; break;
-                case 'title': column = 1; break;
-                case 'author': column = 2; break;
-                case 'genre': column = 3; break;
-                case 'date': column = 4; break;
-                case 'isbn': column = 5; break;
+                case 'id': column = 0;
+                        document.querySelector(DOMstrings.sortId).classList.add('active');
+                         break;
+                case 'title': column = 1;
+                            document.querySelector(DOMstrings.sortTitle).classList.add('active');
+                            break;
+                case 'author': column = 2;
+                            document.querySelector(DOMstrings.sortAuthor).classList.add('active');
+                            break;
+                case 'genre': column = 3;
+                            document.querySelector(DOMstrings.sortGenre).classList.add('active');
+                            break;
+                case 'date': column = 4;
+                            document.querySelector(DOMstrings.sortDate).classList.add('active');
+                            break;
+                case 'isbn': column = 5;
+                            document.querySelector(DOMstrings.sortISBN).classList.add('active');
+                            break;
             }
 
             do {
@@ -285,7 +309,7 @@ var controller = (function (dataCtrl, UICtrl) {
                 UICtrl.showError('Book has already been added.');
             }
         } else {
-            UICtrl.showError('Wrong input values.');
+            UICtrl.showError('Some inputs are empty.');
         }
      
     };

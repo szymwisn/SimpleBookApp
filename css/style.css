@@ -1,0 +1,19 @@
+.table th {
+    color: #666;
+}
+
+.active {
+    color: #363636 !important;
+}
+
+.active::after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background-color: #666;
+    top: 18px;
+    position: absolute;
+    display: inline-block;
+    margin-left: 5px;
+    border-radius: 100%;
+}

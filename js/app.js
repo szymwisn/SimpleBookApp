@@ -77,7 +77,19 @@ const UIController = (function () {
             table = document.querySelector(DOMstrings.table);
             rows = table.rows;
 
-            // set active indicator
+            // 1. Disable active indicators
+            disableIndicators();
+
+            // 2. Define by which column we sort and set the active indicator
+            chooseColumn();
+
+            // 3. Switch rows
+            switchRows();
+
+
+            
+
+            // disable active indicators
             function disableIndicators() {
                 document.querySelector(DOMstrings.sortId).classList.remove('active');
                 document.querySelector(DOMstrings.sortTitle).classList.remove('active');
@@ -87,87 +99,96 @@ const UIController = (function () {
                 document.querySelector(DOMstrings.sortISBN).classList.remove('active');
             }
 
-            disableIndicators();
-
-            switch(by) {
-                case 'id': column = 0;
+            function chooseColumn() {
+                switch (by) {
+                    case 'id': column = 0;
                         document.querySelector(DOMstrings.sortId).classList.add('active');
-                         break;
-                case 'title': column = 1;
-                            document.querySelector(DOMstrings.sortTitle).classList.add('active');
-                            break;
-                case 'author': column = 2;
-                            document.querySelector(DOMstrings.sortAuthor).classList.add('active');
-                            break;
-                case 'genre': column = 3;
-                            document.querySelector(DOMstrings.sortGenre).classList.add('active');
-                            break;
-                case 'date': column = 4;
-                            document.querySelector(DOMstrings.sortDate).classList.add('active');
-                            break;
-                case 'isbn': column = 5;
-                            document.querySelector(DOMstrings.sortISBN).classList.add('active');
-                            break;
+                        break;
+                    case 'title': column = 1;
+                        document.querySelector(DOMstrings.sortTitle).classList.add('active');
+                        break;
+                    case 'author': column = 2;
+                        document.querySelector(DOMstrings.sortAuthor).classList.add('active');
+                        break;
+                    case 'genre': column = 3;
+                        document.querySelector(DOMstrings.sortGenre).classList.add('active');
+                        break;
+                    case 'date': column = 4;
+                        document.querySelector(DOMstrings.sortDate).classList.add('active');
+                        break;
+                    case 'isbn': column = 5;
+                        document.querySelector(DOMstrings.sortISBN).classList.add('active');
+                        break;
+                }
             }
 
-            do {
-                switching = false;
-                for(var i = 1; i < rows.length - 1; i++) {
-                    r1 = rows[i].getElementsByTagName('td')[column];
-                    r2 = rows[i+1].getElementsByTagName('td')[column];
-    
-                    doTheSwitch();
+            function switchRows() {
+                do {
+                    switching = false;
+                    for (let i = 1; i < rows.length - 1; i++) {
+                        r1 = rows[i].getElementsByTagName('td')[column];
+                        r2 = rows[i + 1].getElementsByTagName('td')[column];
 
+                        doTheSwitch(i);
+
+                    }
+                } while (switching);
+            }
+
+            function doTheSwitch(i) {
+                // transforms and returns date as an array [year, month, day]
+                function convertDate(date) {
+                    let arr, year, month, day;
+
+                    arr = date.split("-");
+
+                    year = arr[0];
+                    month = arr[1];
+                    day = arr[2];
+
+                    return [year, month, day];
+                }   
+
+                const [year1, month1, day1] = [convertDate(r1.innerHTML)];
+                const [year2, month2, day2] = [convertDate(r2.innerHTML)];
+
+                function switchRows() {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
                 }
-            } while(switching);
 
-            function doTheSwitch() {
                 // sorting numbers
                 if(column === 0 || column === 5) {
                     if(Number(r1.innerHTML) > Number(r2.innerHTML)) {
-                        rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
-                        switching = true;
+                        switchRows();
                     }
 
                 // sorting strings
                 } else if(column > 0 && column < 4) {
                     if(r1.innerHTML.toLowerCase() > r2.innerHTML.toLowerCase()) {
-                        rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
-                        switching = true;
+                        switchRows();
                     }
 
                 // sorting dates
                 } else if(column === 4) {
-
                     // first sort by year
-                    if(convertDate(r1.innerHTML)[0] > convertDate(r2.innerHTML)[0]) {
-                        rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
-                        switching = true;
-                    } else
-
+                    if(year1 > year2) {
+                        switchRows();
+                    }
                     // if the same year, sort by month
-                    if(convertDate(r1.innerHTML)[0] === convertDate(r2.innerHTML)[0]) {
-                        if(convertDate(r1.innerHTML)[1] > convertDate(r2.innerHTML)[1]) {
-                            rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
-                            switching = true;
-                        } else
-
+                    else if(year1 === year2) {
+                        if(month1 > month2) {
+                            switchRows();
+                        } 
                         // if the same year nad month, sort by day
-                        if(convertDate(r1.innerHTML)[1] === convertDate(r2.innerHTML)[1]) {
-                            if(convertDate(r1.innerHTML)[2] > convertDate(r2.innerHTML)[2]) {
-                                rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
-                                switching = true;
+                        else if(month1 === month2) {
+                            if(day1 > day2) {
+                                switchRows();
                             }
                         }
                     } 
                 }
-            }
-
-            // transforms and returns date to an array [year, month, day]
-            function convertDate(date) {
-                let arr = date.split("-");
-                return [arr[0], arr[1], arr[2]];
-            }      
+            }   
         },
 
 

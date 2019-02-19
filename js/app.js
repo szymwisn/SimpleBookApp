@@ -193,9 +193,9 @@ const UIController = (function () {
 
 
         clearInputs: function() {
-            let inputsNodeList = document.querySelectorAll(DOMstrings.title + ', ' + DOMstrings.author + ', ' + DOMstrings.genre + ', ' + DOMstrings.isbn);
+            const inputsNodeList = document.querySelectorAll(DOMstrings.title + ', ' + DOMstrings.author + ', ' + DOMstrings.genre + ', ' + DOMstrings.isbn);
         
-            let inputsArray = Array.from(inputsNodeList);
+            const inputsArray = Array.from(inputsNodeList);
 
             inputsArray.forEach(el => el.value = '');
 
@@ -326,8 +326,10 @@ const controller = (function (dataCtrl, UICtrl) {
     };
 
     const validateInput = function(obj) {
-        if(obj.title === '' || obj.author === '' || obj.genre === '' || obj.date === '' || obj.isbn === '') {
-            return false;
+        for(let key in obj) {
+            if (obj[key] === '') {
+                return false;
+            }                
         }
 
         return true;
@@ -336,8 +338,8 @@ const controller = (function (dataCtrl, UICtrl) {
     const checkIfExists = function(isbn) {
         let data =  dataCtrl.getData();
 
-        for(let i = 0; i < data.allBooks.length; i++) {
-            if(data.allBooks[i].isbn === isbn) {
+        for(let current of data.allBooks) {
+            if(current.isbn === isbn) {
                 return false;
             }
         }

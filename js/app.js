@@ -1,12 +1,14 @@
 const dataController = (function () {
-    let Book = function(id, title, author, genre, date, isbn) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-        this.date = date;
-        this.isbn = isbn;
-    };
+    class Book {
+        constructor(id, title, author, genre, date, isbn) {
+            this.id = id;
+            this.title = title;
+            this.author = author;
+            this.genre = genre;
+            this.date = date;
+            this.isbn = isbn;
+        }
+    }
 
     let data = {
         allBooks: []
